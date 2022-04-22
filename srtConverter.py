@@ -50,7 +50,7 @@ def convertSRT(inFile, outFile, debug=False):
     drone_Pitch = []
     drone_Roll = []
 
-    for line in lines[0:10]:
+    for line in lines:
         counter = counter + 1
         if counter == 1:
             sampleNR.append(line)
@@ -70,7 +70,6 @@ def convertSRT(inFile, outFile, debug=False):
 
         elif counter == 4:
             l4 = re.split(" ", line)
-            print(l4)
             dato = datetime.fromisoformat(l4[0])
             dato_posix_us = dato.timestamp() * 1e6
             time_posix_us = extract_time_us(l4[1])
@@ -105,6 +104,9 @@ def convertSRT(inFile, outFile, debug=False):
 
     with open(outFile, 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f, delimiter=',')
+        # comment the lines in if header is wanted
+        #header = ["h1","h2","h3"]
+        # writer.writerow(header)
         for n in range(len(sampleNR)):
             # alter the order of the csv stuff in this line:
             row = [
@@ -140,7 +142,3 @@ def convertSRT(inFile, outFile, debug=False):
         print('drone_yaw', drone_yaw)
         print('drone_Pitch', drone_Pitch)
         print('drone_Roll', drone_Roll)
-
-
-infile = "DJI_0781.SRT"
-convertSRT(infile, "test", TRUE)
